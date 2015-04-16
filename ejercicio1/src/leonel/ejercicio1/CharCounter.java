@@ -50,7 +50,7 @@ public class CharCounter {
 	}
 
 	private void initializeMap(HashMap<Character, Integer> result) {
-		String alphabet = "abcdefghijklmnñopqrstuvwxyz123456789!#$%&/()=?¡+-";
+		String alphabet = "abcdefghijklmnopqrstuvwxyz123456789@#$";
 
 		for (int i = 0; i < alphabet.length(); i++) {
 			result.put(alphabet.charAt(i), howMany(alphabet.charAt(i)));
