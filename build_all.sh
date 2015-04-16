@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
 set -e
 cd ejemplo1
-sudo ant
+ant
+cd ../ejemplo1
+ant
