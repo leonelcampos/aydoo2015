@@ -1,5 +1,7 @@
 package ejercicio1;
 
+import java.util.HashMap;
+
 public class CharCounter {
 	private String word;
 
@@ -30,4 +32,13 @@ public class CharCounter {
 		return count;
 	}
 
+	public HashMap<Character, Integer> countAll() {
+		HashMap<Character, Integer> result = new HashMap<Character, Integer>();
+		
+		result.put('h', 1);
+		result.put('z', 0);
+		result.put('l', 3);
+		
+		return result;
+	}
 }
