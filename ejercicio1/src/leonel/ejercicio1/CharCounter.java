@@ -34,11 +34,26 @@ public class CharCounter {
 
 	public HashMap<Character, Integer> countAll() {
 		HashMap<Character, Integer> result = new HashMap<Character, Integer>();
-		
-		result.put('h', 1);
-		result.put('z', 0);
-		result.put('l', 3);
-		
+		int count = 0;
+		initializeMap(result);
+
+		for (int i = 0; i < word.length(); i++) {
+
+			if (!result.containsKey(word.charAt(i))) {
+				count = countCharacterFromWord(word.charAt(i), count);
+				result.put(word.charAt(i), count);
+			}
+			count = 0;
+		}
+
 		return result;
+	}
+
+	private void initializeMap(HashMap<Character, Integer> result) {
+		String alphabet = "abcdefghijklmnñopqrstuvwxyz123456789!#$%&/()=?¡+-";
+
+		for (int i = 0; i < alphabet.length(); i++) {
+			result.put(alphabet.charAt(i), howMany(alphabet.charAt(i)));
+		}
 	}
 }
