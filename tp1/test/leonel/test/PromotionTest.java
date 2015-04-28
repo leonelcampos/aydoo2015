@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import domain.AXBPromotion;
 import domain.AbsolutePromotion;
 import domain.Attraction;
 import domain.AttractionType;
@@ -53,8 +54,7 @@ public class PromotionTest {
 	@Test
 	public void whenCreateAAxBPromotionThenIsAppropiateForUser() {
 		List<Attraction> attractions = generateAtractionsList();
-		Promotion aXBPromotion = new AbsolutePromotion(attractions, startDate(), endDate(), 3000);
-		
+		Promotion aXBPromotion = new AXBPromotion(startDate(), endDate(), attractions, generateAtractionBonusForAxBPromotion());
 		
 		User juan = new User(3000, 72, 20, AttractionType.CAMPING);
 		
@@ -63,10 +63,9 @@ public class PromotionTest {
 	}
 	
 	@Test
-	public void whenCreateAAxBPromotionThenPromotionIsExpired() {
+	public void whenCreateAAxBPromotionThenManyIsNotEnough() {
 		List<Attraction> attractions = generateAtractionsList();
-		Promotion aXBPromotion = new AbsolutePromotion(attractions, startDate(), endDate(), 3000);
-		
+		Promotion aXBPromotion = new AXBPromotion(startDate(), endDate(), attractions, generateAtractionBonusForAxBPromotion());
 		
 		User juan = new User(3000, 72, 20, AttractionType.CAMPING);
 		
@@ -75,6 +74,25 @@ public class PromotionTest {
 	}
 	
 	
+	@Test
+	public void whenCreateAAxBPromotionThenPromotionIsExpired() {
+		List<Attraction> attractions = generateAtractionsList();
+		Promotion aXBPromotion = new AXBPromotion(startDate(), endDate(), attractions, generateAtractionBonusForAxBPromotion());
+		
+		User juan = new User(300, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertFalse(aXBPromotion.isAppropiateForUser(juan, validDate()));
+			
+	}
+	
+	private List<Attraction> generateAtractionBonusForAxBPromotion(){
+		List<Attraction> attractions = new ArrayList<Attraction>();
+		
+		Attraction skydiving = new Attraction(50, 20, 500, 8, 20, AttractionType.SKYDIVING);
+		attractions.add(skydiving);
+		
+		return attractions;
+	}
 	
 	private List<Attraction> generateAtractionsList() {
 		List<Attraction> attractions = new ArrayList<Attraction>();
