@@ -122,6 +122,18 @@ public class PromotionTest {
 			
 	}
 	
+	@Test
+	public void whenCreateAPercentagePromotionThenThisIsCreatedWhitDeterminatedCost() {
+		
+		List<Attraction> attractions = generateAtractionsList();
+		Promotion percentagePromotion = new PercentagePromotion(startDate(), endDate(), 50, attractions);
+		
+		double costExpected = 600;
+		
+		Assert.assertEquals( costExpected, percentagePromotion.getCost(), 0.1);
+			
+	}
+	
 	private List<Attraction> generateAtractionBonusForAxBPromotion(){
 		List<Attraction> attractions = new ArrayList<Attraction>();
 		

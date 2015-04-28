@@ -10,7 +10,6 @@ public class AbsolutePromotion implements Promotion{
 	private Date endDate;
 	private double cost;
 	private List<Attraction> attractions = new ArrayList<Attraction>();
-	private double totalAverageTime;
 	
 	public AbsolutePromotion(List<Attraction> attractions, Date startDate, Date endDate, double cost) {
 		this.startDate = startDate;
@@ -18,7 +17,6 @@ public class AbsolutePromotion implements Promotion{
 		this.cost = cost;
 		this.attractions = attractions;
 		
-		this.totalAverageTime = calculateTotalAverageTime();
 	}
 
 	public Date getStartDate() {
@@ -49,17 +47,13 @@ public class AbsolutePromotion implements Promotion{
 		this.cost = cost;
 	}
 	
-	private double calculateTotalAverageTime(){
+	public double getTotalAverageTime(){
+		
 		double totalAverageTime = 0;
 		
 		for (Attraction attraction : attractions) {
 			totalAverageTime += attraction.getAverageTime();
 		}
-		
-		return totalAverageTime;
-	}
-	
-	private double getTotalAverageTime(){
 		
 		return totalAverageTime;
 	}

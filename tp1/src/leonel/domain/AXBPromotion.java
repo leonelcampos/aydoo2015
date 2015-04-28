@@ -24,23 +24,23 @@ public class AXBPromotion implements Promotion{
 		this.obligatoryAttractions = obligatoryAttractions;
 		this.bonusAttractions = bonusAttractions;
 	}
-
+	@Override
 	public Date getStartDate() {
 		return startDate;
 	}
-
+	@Override
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
+	@Override
 	public Date getEndDate() {
 		return endDate;
 	}
-
+	@Override
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
+	@Override
 	public double getCost() {
 		for (Attraction attraction : obligatoryAttractions) {
 			cost += attraction.getCost();
@@ -48,32 +48,23 @@ public class AXBPromotion implements Promotion{
 		
 		return cost;
 	}
-
+	
 	public List<Attraction> getObligatoryAttractions() {
 		return obligatoryAttractions;
 	}
 	
-	public List<Attraction> getAttractionsOfPromotions(){
-		List<Attraction> attractions = new ArrayList<Attraction>();
-		attractions.addAll(obligatoryAttractions);
-		attractions.addAll(bonusAttractions);
-		
-		return attractions;
-		
-	}
-
 	public void setObligatoryAttractions(List<Attraction> obligatoryAttractions) {
 		this.obligatoryAttractions = obligatoryAttractions;
 	}
-
+	
 	public List<Attraction> getBonusAttractions() {
 		return bonusAttractions;
 	}
-
+	
 	public void setBonusAttractions(List<Attraction> bonusAttractions) {
 		this.bonusAttractions = bonusAttractions;
 	}
-
+	@Override
 	public double getTotalAverageTime() {
 		for (Attraction attraction : obligatoryAttractions) {
 			totalAverageTime += attraction.getAverageTime();
@@ -107,5 +98,15 @@ public class AXBPromotion implements Promotion{
 		
 		return false;
 	}
+	
+	@Override
+	public List<Attraction> getAttractions() {
+		List<Attraction> attractions = new ArrayList<Attraction>();
+		attractions.addAll(obligatoryAttractions);
+		attractions.addAll(bonusAttractions);
+		
+		return attractions;
+	}
+	
 	
 }
