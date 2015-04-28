@@ -41,6 +41,16 @@ public class PromotionTest {
 	}
 	
 	@Test
+	public void whenCreateAAbsolutePromotionThenManyIsNotEnough() {
+		List<Attraction> atractions = generateAtractionsList();
+		Promotion absolutePromotion = new AbsolutePromotion(atractions, startDate(), endDate(), 1000);
+		
+		User juan = new User(300, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertFalse(absolutePromotion.isAppropiateForUser(juan, validDate()));		
+	}
+	
+	@Test
 	public void whenCreateAAxBPromotionThenIsAppropiateForUser() {
 		List<Attraction> attractions = generateAtractionsList();
 		Promotion aXBPromotion = new AbsolutePromotion(attractions, startDate(), endDate(), 3000);
@@ -53,13 +63,15 @@ public class PromotionTest {
 	}
 	
 	@Test
-	public void whenCreateAAbsolutePromotionThenManyIsNotEnough() {
-		List<Attraction> atractions = generateAtractionsList();
-		Promotion absolutePromotion = new AbsolutePromotion(atractions, startDate(), endDate(), 1000);
+	public void whenCreateAAxBPromotionThenPromotionIsExpired() {
+		List<Attraction> attractions = generateAtractionsList();
+		Promotion aXBPromotion = new AbsolutePromotion(attractions, startDate(), endDate(), 3000);
 		
-		User juan = new User(300, 72, 20, AttractionType.CAMPING);
 		
-		Assert.assertFalse(absolutePromotion.isAppropiateForUser(juan, validDate()));		
+		User juan = new User(3000, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertFalse(aXBPromotion.isAppropiateForUser(juan, invalidDate()));
+			
 	}
 	
 	
