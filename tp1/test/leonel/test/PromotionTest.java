@@ -13,6 +13,7 @@ import domain.AXBPromotion;
 import domain.AbsolutePromotion;
 import domain.Attraction;
 import domain.AttractionType;
+import domain.PercentagePromotion;
 import domain.Promotion;
 import domain.User;
 
@@ -73,9 +74,9 @@ public class PromotionTest {
 			
 	}
 	
-	
 	@Test
 	public void whenCreateAAxBPromotionThenPromotionIsExpired() {
+		
 		List<Attraction> attractions = generateAtractionsList();
 		Promotion aXBPromotion = new AXBPromotion(startDate(), endDate(), attractions, generateAtractionBonusForAxBPromotion());
 		
@@ -84,6 +85,19 @@ public class PromotionTest {
 		Assert.assertFalse(aXBPromotion.isAppropiateForUser(juan, validDate()));
 			
 	}
+	
+	@Test
+	public void whenCreateAPercentagePromotionThenIsApropiateForUser() {
+		
+		List<Attraction> attractions = generateAtractionsList();
+		Promotion percentagePromotion = new PercentagePromotion(startDate(), endDate(), 50, attractions);
+		
+		User juan = new User(600, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertTrue(percentagePromotion.isAppropiateForUser(juan, validDate()));
+			
+	}
+	
 	
 	private List<Attraction> generateAtractionBonusForAxBPromotion(){
 		List<Attraction> attractions = new ArrayList<Attraction>();
@@ -136,5 +150,7 @@ public class PromotionTest {
 		
 		return ahoraCal.getTime();
 	}
+	
+	
 
 }

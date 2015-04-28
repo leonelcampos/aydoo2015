@@ -82,10 +82,6 @@ public class AXBPromotion implements Promotion{
 		return totalAverageTime;
 	}
 
-	public void setTotalAverageTime(double totalAverageTime) {
-		this.totalAverageTime = totalAverageTime;
-	}
-
 	@Override
 	public boolean isAppropiateForUser(User user, Date date) {
 		if(isAvailable(date)){
