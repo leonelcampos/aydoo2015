@@ -52,6 +52,16 @@ public class PromotionTest {
 			
 	}
 	
+	@Test
+	public void whenCreateAAbsolutePromotionThenManyIsNotEnough() {
+		List<Attraction> atractions = generateAtractionsList();
+		Promotion absolutePromotion = new AbsolutePromotion(atractions, startDate(), endDate(), 1000);
+		
+		User juan = new User(300, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertFalse(absolutePromotion.isAppropiateForUser(juan, validDate()));		
+	}
+	
 	
 	
 	private List<Attraction> generateAtractionsList() {
