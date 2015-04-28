@@ -75,7 +75,7 @@ public class AbsolutePromotion implements Promotion{
 		return false;
 	}
 
-	private boolean isAvailable(Date date) {
+	public boolean isAvailable(Date date) {
 		return (startDate.before(date))&&(endDate.after(date));
 	}
 

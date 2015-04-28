@@ -22,20 +22,33 @@ public class PromotionTest {
 		List<Attraction> atractions = generateAtractionsList();
 		Promotion absolutePromotion = new AbsolutePromotion(atractions, startDate(), endDate(), 1000);
 		
-		User juan = new User(2000, 72, 20, AttractionType.CAMPING);
+		User juan = new User(3000, 72, 20, AttractionType.CAMPING);
 		
 		Assert.assertTrue(absolutePromotion.isAppropiateForUser(juan, validDate()));
 			
 	}
 	
+	
 	@Test
-	public void whenAskIfPromotionIsAppropiateForUserThenPromottionIsExpired() {
-		List<Attraction> atractions = generateAtractionsList();
-		Promotion absolutePromotion = new AbsolutePromotion(atractions, startDate(), endDate(), 1000);
+	public void whenCreateAAbsolutePromotionThenPromottionIsExpired() {
+		List<Attraction> attractions = generateAtractionsList();
+		Promotion absolutePromotion = new AbsolutePromotion(attractions, startDate(), endDate(), 1000);
 		
 		User juan = new User(2000, 72, 20, AttractionType.CAMPING);
 		
-		Assert.assertTrue(absolutePromotion.isAppropiateForUser(juan, validDate()));
+		Assert.assertFalse(absolutePromotion.isAppropiateForUser(juan, invalidDate()));
+			
+	}
+	
+	@Test
+	public void whenCreateAAxBPromotionThenIsAppropiateForUser() {
+		List<Attraction> attractions = generateAtractionsList();
+		Promotion aXBPromotion = new AbsolutePromotion(attractions, startDate(), endDate(), 3000);
+		
+		
+		User juan = new User(3000, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertTrue(aXBPromotion.isAppropiateForUser(juan, validDate()));
 			
 	}
 	
