@@ -28,6 +28,17 @@ public class PromotionTest {
 			
 	}
 	
+	@Test
+	public void whenAskIfPromotionIsAppropiateForUserThenPromottionIsExpired() {
+		List<Attraction> atractions = generateAtractionsList();
+		Promotion absolutePromotion = new AbsolutePromotion(atractions, startDate(), endDate(), 1000);
+		
+		User juan = new User(2000, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertTrue(absolutePromotion.isAppropiateForUser(juan, validDate()));
+			
+	}
+	
 	
 	
 	private List<Attraction> generateAtractionsList() {
