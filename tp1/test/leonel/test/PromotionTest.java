@@ -98,6 +98,17 @@ public class PromotionTest {
 			
 	}
 	
+	@Test
+	public void whenCreateAPercentagePromotionThenPromotionIsExpired() {
+		
+		List<Attraction> attractions = generateAtractionsList();
+		Promotion percentagePromotion = new PercentagePromotion(startDate(), endDate(), 50, attractions);
+		
+		User juan = new User(600, 72, 20, AttractionType.CAMPING);
+		
+		Assert.assertFalse(percentagePromotion.isAppropiateForUser(juan, invalidDate()));
+			
+	}
 	
 	private List<Attraction> generateAtractionBonusForAxBPromotion(){
 		List<Attraction> attractions = new ArrayList<Attraction>();
