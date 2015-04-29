@@ -24,6 +24,7 @@ public class AXBPromotion implements Promotion{
 		this.obligatoryAttractions = obligatoryAttractions;
 		this.bonusAttractions = bonusAttractions;
 	}
+	
 	@Override
 	public Date getStartDate() {
 		return startDate;
@@ -64,6 +65,7 @@ public class AXBPromotion implements Promotion{
 	public void setBonusAttractions(List<Attraction> bonusAttractions) {
 		this.bonusAttractions = bonusAttractions;
 	}
+	
 	@Override
 	public double getTotalAverageTime() {
 		for (Attraction attraction : obligatoryAttractions) {
@@ -78,8 +80,20 @@ public class AXBPromotion implements Promotion{
 		if(isAvailable(date)){
 			return(user.getMany() >= getCost()) &&
 				(user.getAvailableTime() >= getTotalAverageTime()) &&
-				(containsFavoriteAttractionType(user.getFavoriteAttraction()));
+				(containsFavoriteAttractionType(user.getFavoriteAttraction()))&&
+				(hasDisponibility());
 		}
+		return false;
+	}
+
+	private boolean hasDisponibility() {
+			
+		for (Attraction attraction : getAttractions()) {
+			if(attraction.getDisponibility()>0){
+				return true;
+			}
+		}
+		
 		return false;
 	}
 

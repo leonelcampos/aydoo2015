@@ -30,7 +30,6 @@ public class PromotionTest {
 			
 	}
 	
-	
 	@Test
 	public void whenCreateAAbsolutePromotionThenPromottionIsExpired() {
 		List<Attraction> attractions = generateAtractionsList();

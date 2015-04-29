@@ -6,16 +6,16 @@ public class Attraction {
 	private double cost;
 	private double averageTime;
 	private AttractionType attractionType;
-	private int share;
+	private int disponibility;
 	
 	public Attraction(int positionX, int positionY, double cost,
-			double averageTime, int share,  AttractionType attractionType ) {
+			double averageTime, int disponibility,  AttractionType attractionType ) {
 
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.cost = cost;
 		this.averageTime = averageTime;
-		this.share = share;
+		this.disponibility = disponibility;
 		this.attractionType = attractionType;
 	}
 
@@ -44,12 +44,12 @@ public class Attraction {
 		this.averageTime = averageTime;
 	}
 
-	public int getShare() {
-		return share;
+	public int getDisponibility() {
+		return disponibility;
 	}
 
-	public void setShare(int share) {
-		this.share = share;
+	public void setDisponibility(int disponibility) {
+		this.disponibility = disponibility;
 	}
 
 	public AttractionType getAttractionType() {

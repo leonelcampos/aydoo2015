@@ -59,12 +59,6 @@ public class PercentagePromotion implements Promotion{
 		return attractions;
 	}
 
-	public void setAttractions(List<Attraction> attractions) {
-		this.attractions = attractions;
-	}
-
-
-
 	public double getTotalAverageTime() {
 		for (Attraction attraction : attractions) {
 			totalAverageTime += attraction.getAverageTime();
@@ -78,8 +72,20 @@ public class PercentagePromotion implements Promotion{
 		if(isAvailable(date)){
 			return(user.getMany() >= getCost()) &&
 				(user.getAvailableTime() >= getTotalAverageTime()) &&
-				(containsFavoriteAttractionType(user.getFavoriteAttraction()));
+				(containsFavoriteAttractionType(user.getFavoriteAttraction()))&&
+				(hasDisponibility());
 		}
+		return false;
+	}
+
+	private boolean hasDisponibility() {
+			
+		for (Attraction attraction : attractions) {
+			if(attraction.getDisponibility()>0){
+				return true;
+			}
+		}
+		
 		return false;
 	}
 

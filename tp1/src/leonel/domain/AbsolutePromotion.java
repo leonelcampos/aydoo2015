@@ -60,12 +60,23 @@ public class AbsolutePromotion implements Promotion{
 
 	@Override
 	public boolean isAppropiateForUser(User user, Date date) {
-		
 		if(isAvailable(date)){
 			return(user.getMany() >= getCost()) &&
 				(user.getAvailableTime() >= getTotalAverageTime()) &&
-				(containsFavoriteAttractionType(user.getFavoriteAttraction()));
+				(containsFavoriteAttractionType(user.getFavoriteAttraction()))&&
+				(hasDisponibility());
 		}
+		return false;
+	}
+
+	private boolean hasDisponibility() {
+			
+		for (Attraction attraction : attractions) {
+			if(attraction.getDisponibility()>0){
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
