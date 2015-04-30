@@ -9,20 +9,20 @@ public class AXBPromotion implements Promotion{
 	private Date startDate;
 	private Date endDate;
 	private double cost;
-	private List<Attraction> obligatoryAttractions = new ArrayList<Attraction>();
-	private List<Attraction> bonusAttractions = new ArrayList<Attraction>();
+	private List<Attraction> obligatoryAttractions;
+	private Attraction bonusAttraction;
 	private double totalAverageTime;
 	
 	
 	
 	public AXBPromotion(Date startDate, Date endDate,
 			List<Attraction> obligatoryAttractions,
-			List<Attraction> bonusAttractions) {
+			Attraction bonusAttractions) {
 		
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.obligatoryAttractions = obligatoryAttractions;
-		this.bonusAttractions = bonusAttractions;
+		this.bonusAttraction = bonusAttractions;
 	}
 	
 	@Override
@@ -58,69 +58,54 @@ public class AXBPromotion implements Promotion{
 		this.obligatoryAttractions = obligatoryAttractions;
 	}
 	
-	public List<Attraction> getBonusAttractions() {
-		return bonusAttractions;
+	public Attraction getBonusAttraction() {
+		return bonusAttraction;
 	}
 	
-	public void setBonusAttractions(List<Attraction> bonusAttractions) {
-		this.bonusAttractions = bonusAttractions;
-	}
-	
-	@Override
-	public double getTotalAverageTime() {
-		for (Attraction attraction : obligatoryAttractions) {
-			totalAverageTime += attraction.getAverageTime();
-		}
-		
-		return totalAverageTime;
-	}
-
-	@Override
-	public boolean isAppropiateForUser(User user, Date date) {
-		if(isAvailable(date)){
-			return(user.getMany() >= getCost()) &&
-				(user.getAvailableTime() >= getTotalAverageTime()) &&
-				(containsFavoriteAttractionType(user.getFavoriteAttraction()))&&
-				(hasDisponibility());
-		}
-		return false;
-	}
-
-	private boolean hasDisponibility() {
-			
-		for (Attraction attraction : getAttractions()) {
-			if(attraction.getDisponibility()>0){
-				return true;
-			}
-		}
-		
-		return false;
+	public void setBonusAttraction(Attraction bonusAttraction) {
+		this.bonusAttraction = bonusAttraction;
 	}
 
 	public boolean isAvailable(Date date) {
 		return (startDate.before(date))&&(endDate.after(date));
 	}
 
-	private boolean containsFavoriteAttractionType(
-			AttractionType favoriteAttraction) {
-		
-		for (Attraction attraction : obligatoryAttractions) {
-			if(attraction.getAttractionType().equals(favoriteAttraction)){
-				return true;
-			}
-		}
-		
-		return false;
-	}
+	
 	
 	@Override
 	public List<Attraction> getAttractions() {
 		List<Attraction> attractions = new ArrayList<Attraction>();
 		attractions.addAll(obligatoryAttractions);
-		attractions.addAll(bonusAttractions);
+		attractions.add(bonusAttraction);
 		
 		return attractions;
 	}
 	
+	public double applyPromotion(Date date, List<Attraction> attractionsForCheck){
+		double cost = 0;
+		if(isAvailable(date)){
+			if(attractionsForCheck.contains(this.getObligatoryAttractions())){
+				cost = calculateCost(attractionsForCheck);
+				
+				if(attractionsForCheck.contains(this.getBonusAttraction())){
+					
+					cost -= this.getBonusAttraction().getCost();
+				}else{
+					attractionsForCheck.add(this.getBonusAttraction());
+				}
+			}		
+		}else{
+			cost = calculateCost(attractionsForCheck);
+		}
+		return cost;
+	}
+	
+	private double calculateCost(List<Attraction> attractionsForItinerary){
+		double cost = 0;
+		for (Attraction attraction : attractionsForItinerary) {
+			cost += attraction.getCost();
+		}
+		return cost;
+	}
 	
 }

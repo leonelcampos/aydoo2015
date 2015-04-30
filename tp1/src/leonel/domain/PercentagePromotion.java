@@ -59,52 +59,31 @@ public class PercentagePromotion implements Promotion{
 		return attractions;
 	}
 
-	public double getTotalAverageTime() {
-		for (Attraction attraction : attractions) {
-			totalAverageTime += attraction.getAverageTime();
-		}
-		
-		return totalAverageTime;
-	}
-
-	@Override
-	public boolean isAppropiateForUser(User user, Date date) {
-		if(isAvailable(date)){
-			return(user.getMany() >= getCost()) &&
-				(user.getAvailableTime() >= getTotalAverageTime()) &&
-				(containsFavoriteAttractionType(user.getFavoriteAttraction()))&&
-				(hasDisponibility());
-		}
-		return false;
-	}
-
-	private boolean hasDisponibility() {
-			
-		for (Attraction attraction : attractions) {
-			if(attraction.getDisponibility()>0){
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
 	public boolean isAvailable(Date date) {
 		return (startDate.before(date))&&(endDate.after(date));
 	}
 
-	private boolean containsFavoriteAttractionType(
-			AttractionType favoriteAttraction) {
-		
-		for (Attraction attraction : attractions) {
-			if(attraction.getAttractionType().equals(favoriteAttraction)){
-				return true;
-			}
+	
+	public double applyPromotion(Date date, List<Attraction> attractionsForCheck){
+		double cost = 0;
+		if(isAvailable(date)){
+			if (attractionsForCheck.containsAll(this.getAttractions())){
+				cost = calculateCost(attractionsForCheck);
+				cost -= calculateCost(this.getAttractions()) + this.getCost();
+			}		
+		}else{
+			cost = calculateCost(attractionsForCheck);
 		}
-		
-		return false;
+		return cost;
 	}
 	
+	private double calculateCost(List<Attraction> attractionsForItinerary){
+		double cost = 0;
+		for (Attraction attraction : attractionsForItinerary) {
+			cost += attraction.getCost();
+		}
+		return cost;
+	}
 	
 	
 }

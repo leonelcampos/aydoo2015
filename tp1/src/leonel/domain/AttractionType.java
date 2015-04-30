@@ -1,5 +1,5 @@
 package domain;
 
 public enum AttractionType {
-	MUSEUM, CAMPING, SKYDIVING, LANSCAPE
+	MUSEUM, CAMPING, SKYDIVING, LANSCAPE, ADVENTURE
 }

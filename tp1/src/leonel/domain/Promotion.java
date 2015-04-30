@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface Promotion {
-
-	boolean isAppropiateForUser(User user, Date date);
 	
 	Date getStartDate();
 
@@ -19,9 +17,8 @@ public interface Promotion {
 
 	double getCost();
 
-	double getTotalAverageTime();
-
 	boolean isAvailable(Date date);
 	
+	double applyPromotion(Date date, List<Attraction> attractionsForCheck);
 	
 }
