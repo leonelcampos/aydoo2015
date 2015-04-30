@@ -31,19 +31,26 @@ public class SecretaryTurism {
 		List<Itinerary> itineraries = new ArrayList<>();
 		List<Attraction> attractionsForItinerary = new ArrayList<>();
 		List<Attraction> attractionsAppropiateForUser = getAttractionsAppropiateForUser(user);
-		
+		Attraction eachAtraction = null ;
 		
 		for (int i= 0; i< attractionsAppropiateForUser.size(); i++) {
-			if(verifiAttractionDisponibility(attractions.get(i))){
-				if(verifyAttractionIsAppropiateForUser(attractionsForItinerary, attractions.get(i), user)){
+			eachAtraction = attractions.get(i);
+			if(verifiAttractionDisponibility(eachAtraction)){
+				if(verifyAttractionIsAppropiateForUser(attractionsForItinerary, eachAtraction, user)){
 					
-					attractionsForItinerary.add(attractions.get(i));
+					attractionsForItinerary.add(eachAtraction);
 				}else{	
 					itineraries.add(createItinerary(attractionsForItinerary, user.getSpeed()));
-				
+					attractionsForItinerary = new ArrayList<Attraction>();
+					if(verifyAttractionIsAppropiateForUser(attractionsForItinerary, eachAtraction, user)){
+						
+						attractionsForItinerary.add(eachAtraction);
+					}
 				}
 			}
 		}
+		itineraries.add(createItinerary(attractionsForItinerary, user.getSpeed()));
+		
 		return itineraries;
 		
 	}
