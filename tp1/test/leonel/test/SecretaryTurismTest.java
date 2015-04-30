@@ -49,6 +49,21 @@ public class SecretaryTurismTest {
 		Assert.assertEquals(2000, itineraries.get(0).getTotalCost(), 0.1);
 		
 	}
+	
+	@Test
+	public void whenAskForItinerariesThenOneItineraryIsCreatedByFourAttractions() {
+		List<Attraction> attractions = generateAtractionsList() ;
+		List<Promotion> promotions = generatePromotionsList();
+		
+		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
+		
+		User user = new User(2000, 72, 20, AttractionType.CAMPING);
+		
+		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		
+		Assert.assertEquals(4, itineraries.get(0).getAttractions().size());
+		
+	}
 
 	
 	private List<Promotion> generatePromotionsList(){
