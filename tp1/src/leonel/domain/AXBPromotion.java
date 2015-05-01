@@ -81,15 +81,14 @@ public class AXBPromotion implements Promotion{
 		return attractions;
 	}
 	
-	public double applyPromotion(Date date, List<Attraction> attractionsForCheck){
-		double cost = 0;
+	public double applyPromotion(Date date, List<Attraction> attractionsForCheck, double cost){
 		if(isAvailable(date)){
 			if(attractionsForCheck.contains(this.getObligatoryAttractions())){
 				cost = calculateCost(attractionsForCheck);
 				
 				if(attractionsForCheck.contains(this.getBonusAttraction())){
 					
-					cost -= this.getBonusAttraction().getCost();
+					cost = cost - this.getBonusAttraction().getCost();
 				}else{
 					attractionsForCheck.add(this.getBonusAttraction());
 				}

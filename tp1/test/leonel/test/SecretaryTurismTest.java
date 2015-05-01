@@ -2,6 +2,7 @@ package test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class SecretaryTurismTest {
 	@Test
 	public void whenAskForItinerariesThenSecretaryTurismReturnTwo() {
 		List<Attraction> attractions = generateAtractionsList() ;
-		List<Promotion> promotions = generatePromotionsList();
+		List<Promotion> promotions = generatePromotionsList(attractions);
 		
 		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
 		
@@ -38,7 +39,7 @@ public class SecretaryTurismTest {
 	@Test
 	public void whenAskForItinerariesThenOneItineraryIsCreatedByExpectedCost() {
 		List<Attraction> attractions = generateAtractionsList() ;
-		List<Promotion> promotions = generatePromotionsList();
+		List<Promotion> promotions = generatePromotionsList(attractions);
 		
 		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
 		
@@ -53,7 +54,7 @@ public class SecretaryTurismTest {
 	@Test
 	public void whenAskForItinerariesThenOneItineraryIsCreatedByFourAttractions() {
 		List<Attraction> attractions = generateAtractionsList() ;
-		List<Promotion> promotions = generatePromotionsList();
+		List<Promotion> promotions = generatePromotionsList(attractions);
 		
 		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
 		
@@ -68,7 +69,7 @@ public class SecretaryTurismTest {
 	@Test
 	public void whenAskForItinerariesThenTwoItineraryIsCreatedByTwoAttractions() {
 		List<Attraction> attractions = generateAtractionsList() ;
-		List<Promotion> promotions = generatePromotionsList();
+		List<Promotion> promotions = generatePromotionsList(attractions);
 		
 		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
 		
@@ -79,30 +80,45 @@ public class SecretaryTurismTest {
 		Assert.assertEquals(2, itineraries.get(1).getAttractions().size());
 		
 	}
+	
+	@Test
+	public void whenAskForItinerariesThenOneItineraryHasAbsolutePromotionAvailableAndApply() {
+		List<Attraction> attractions = generateAtractionsList() ;
+		List<Promotion> promotions = new ArrayList<Promotion>();
+		promotions.add(createAbsolutePromotion(attractions));
+		
+		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, validDate());
+		
+		User user = new User(2000, 72, 20, AttractionType.CAMPING);
+		
+		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		
+		Assert.assertEquals(1700, itineraries.get(0).getTotalCost(), 0.1);
+		
+	}
+	
+	@Test
+	public void whenAskForItinerariesThenOneItineraryHasPercentagePromotionAvailableAndApply() {
+		List<Attraction> attractions = generateAtractionsList() ;
+		List<Promotion> promotions = new ArrayList<Promotion>();
+		promotions.add(createPercentagePromotion(attractions));
+		
+		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, validDate());
+		
+		User user = new User(2000, 72, 20, AttractionType.CAMPING);
+		
+		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		
+		Assert.assertEquals(1750, itineraries.get(0).getTotalCost(), 0.1);
+		
+	}
 
 	
-	private List<Promotion> generatePromotionsList(){
-
-		Attraction museumArt = new Attraction(10, 6, 500, 10, 20, AttractionType.MUSEUM);
-		Attraction lanscape = new Attraction(7,  12, 500, 12, 50, AttractionType.LANSCAPE);
-		Attraction adventure = new Attraction(13, 11, 700, 7, 20, AttractionType.ADVENTURE);
-		Attraction museumNatural = new Attraction(40, 7, 400, 7, 20, AttractionType.MUSEUM);
+	private List<Promotion> generatePromotionsList(List<Attraction> attractions){
 		
-		List<Attraction> attractionsAbsolutePromotion = new ArrayList<Attraction>() ;
-		attractionsAbsolutePromotion.add(museumNatural);
-		attractionsAbsolutePromotion.add(lanscape);
-		
-		List<Attraction> attractionsPercentagePromotion = new ArrayList<Attraction>() ;
-		attractionsPercentagePromotion.add(lanscape);
-		attractionsPercentagePromotion.add(adventure);
-		
-		List<Attraction> attractionsAXBPromotion = new ArrayList<Attraction>() ;
-		attractionsAXBPromotion.add(museumNatural);
-		attractionsAXBPromotion.add(lanscape);
-		
-		Promotion absolutePromotion = new AbsolutePromotion(attractionsAbsolutePromotion, startDate(), endDate(), 700);
- 		Promotion percentagePromotion = new PercentagePromotion(startDate(), endDate(), 25, attractionsPercentagePromotion);
- 		Promotion aXBPromotion = new AXBPromotion(startDate(), endDate(), attractionsAXBPromotion, museumArt);
+		Promotion absolutePromotion = createAbsolutePromotion(attractions);
+ 		Promotion percentagePromotion = createPercentagePromotion(attractions);
+ 		Promotion aXBPromotion = createAXBPromotion(attractions);
  		
  		List<Promotion> promotions = new ArrayList<Promotion>();
  		promotions.add(absolutePromotion);
@@ -110,6 +126,32 @@ public class SecretaryTurismTest {
  		promotions.add(aXBPromotion);
  		
  		return promotions;
+	}
+
+	private AXBPromotion createAXBPromotion(List<Attraction> attractions) {
+		List<Attraction> attractionsAXBPromotion = new ArrayList<Attraction>() ;
+		attractionsAXBPromotion.add(attractions.get(5));
+		attractionsAXBPromotion.add(attractions.get(3));
+		
+		return new AXBPromotion(startDate(), endDate(), attractionsAXBPromotion, attractions.get(2));
+	}
+
+	private PercentagePromotion createPercentagePromotion(
+			List<Attraction> attractions) {
+		List<Attraction> attractionsPercentagePromotion = new ArrayList<Attraction>() ;
+		attractionsPercentagePromotion.add(attractions.get(2));
+		attractionsPercentagePromotion.add(attractions.get(3));
+		
+		return new PercentagePromotion(startDate(), endDate(), 25, attractionsPercentagePromotion);
+	}
+
+	private AbsolutePromotion createAbsolutePromotion(
+			List<Attraction> attractions) {
+		List<Attraction> attractionsAbsolutePromotion = new ArrayList<Attraction>() ;
+		attractionsAbsolutePromotion.add(attractions.get(2));
+		attractionsAbsolutePromotion.add(attractions.get(3));
+		
+		return new AbsolutePromotion(attractionsAbsolutePromotion, startDate(), endDate(), 700);
 	}
 	
 	

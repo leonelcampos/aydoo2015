@@ -12,7 +12,6 @@ public class PercentagePromotion implements Promotion{
 	private int percentage;
 	private List<Attraction> attractions = new ArrayList<Attraction>();
 	private double totalAverageTime;
-	private double cost;
 	
 	public PercentagePromotion(Date startDate, Date endDate, int percentage,
 			List<Attraction> attractions) {
@@ -23,10 +22,9 @@ public class PercentagePromotion implements Promotion{
 	}
 	
 	public double getCost() {
-		for (Attraction attraction : attractions) {
-			cost += attraction.getCost();
-		}
-		cost -= (cost * percentage)/100;
+		double cost = 0;
+		cost = calculateCost(this.getAttractions());
+		cost = cost- ((cost * percentage)/100);
 		
 		return cost;
 	}
@@ -64,13 +62,12 @@ public class PercentagePromotion implements Promotion{
 	}
 
 	
-	public double applyPromotion(Date date, List<Attraction> attractionsForCheck){
-		double cost = 0;
+	public double applyPromotion(Date date, List<Attraction> attractionsForCheck, double cost){
 		if(isAvailable(date)){
 			if (attractionsForCheck.containsAll(this.getAttractions())){
 				cost = calculateCost(attractionsForCheck);
-				cost -= calculateCost(this.getAttractions()) + this.getCost();
-			}		
+				cost = cost - calculateCost(this.getAttractions()) + this.getCost();
+			}
 		}else{
 			cost = calculateCost(attractionsForCheck);
 		}

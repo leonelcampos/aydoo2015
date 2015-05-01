@@ -53,18 +53,18 @@ public class AbsolutePromotion implements Promotion{
 	}
 
 	
-	public double applyPromotion(Date date, List<Attraction> attractionsForCheck){
-		double cost = 0;
+	public double applyPromotion(Date date, List<Attraction> attractionsForCheck, double cost){
 		if(isAvailable(date)){
 			if (attractionsForCheck.containsAll(this.getAttractions())){
 				cost = calculateCost(attractionsForCheck);
-				cost -= calculateCost(this.getAttractions()) + this.getCost();
+				cost = cost - calculateCost(this.getAttractions()) + this.getCost();
 			}		
 		}else{
 			cost = calculateCost(attractionsForCheck);
 		}
 		return cost;
 	}
+
 	
 	private double calculateCost(List<Attraction> attractionsForItinerary){
 		double cost = 0;

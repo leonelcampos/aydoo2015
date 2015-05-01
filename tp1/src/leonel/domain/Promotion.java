@@ -19,6 +19,6 @@ public interface Promotion {
 
 	boolean isAvailable(Date date);
 	
-	double applyPromotion(Date date, List<Attraction> attractionsForCheck);
+	double applyPromotion(Date date, List<Attraction> attractionsForCheck, double cost);
 	
 }

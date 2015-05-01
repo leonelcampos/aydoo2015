@@ -110,17 +110,25 @@ public class SecretaryTurism {
 	
 
 	private double calculateTotalCostWithPromotions(List<Attraction> attractionsForItinerary) {
-		double cost = 0;
+		double cost = calculateCost(attractionsForItinerary);
 		
 		for (Promotion promotion : promotions) {		
 			
-			cost = promotion.applyPromotion(date, attractionsForItinerary);
+			cost = promotion.applyPromotion(date, attractionsForItinerary, cost);
 		}
 		
 		return cost;
 		
 	}
 	
+	
+	private double calculateCost(List<Attraction> attractionsForItinerary){
+		double cost = 0;
+		for (Attraction attraction : attractionsForItinerary) {
+			cost += attraction.getCost();
+		}
+		return cost;
+	}
 
 
 	private boolean verifiAttractionDisponibility(Attraction attraction) {	
