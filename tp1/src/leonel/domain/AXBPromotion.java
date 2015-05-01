@@ -11,7 +11,6 @@ public class AXBPromotion implements Promotion{
 	private double cost;
 	private List<Attraction> obligatoryAttractions;
 	private Attraction bonusAttraction;
-	private double totalAverageTime;
 	
 	
 	
@@ -54,17 +53,10 @@ public class AXBPromotion implements Promotion{
 		return obligatoryAttractions;
 	}
 	
-	public void setObligatoryAttractions(List<Attraction> obligatoryAttractions) {
-		this.obligatoryAttractions = obligatoryAttractions;
-	}
-	
 	public Attraction getBonusAttraction() {
 		return bonusAttraction;
 	}
 	
-	public void setBonusAttraction(Attraction bonusAttraction) {
-		this.bonusAttraction = bonusAttraction;
-	}
 
 	public boolean isAvailable(Date date) {
 		return (startDate.before(date))&&(endDate.after(date));
@@ -83,7 +75,7 @@ public class AXBPromotion implements Promotion{
 	
 	public double applyPromotion(Date date, List<Attraction> attractionsForCheck, double cost){
 		if(isAvailable(date)){
-			if(attractionsForCheck.contains(this.getObligatoryAttractions())){
+			if(attractionsForCheck.containsAll(this.getObligatoryAttractions())){
 				cost = calculateCost(attractionsForCheck);
 				
 				if(attractionsForCheck.contains(this.getBonusAttraction())){

@@ -2,7 +2,6 @@ package test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +25,11 @@ public class SecretaryTurismTest {
 		List<Attraction> attractions = generateAtractionsList() ;
 		List<Promotion> promotions = generatePromotionsList(attractions);
 		
-		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
+		SecretaryTurism tierraMedia = new SecretaryTurism(promotions, attractions, invalidDate());
 		
 		User user = new User(2000, 72, 20, AttractionType.CAMPING);
 		
-		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		List<Itinerary> itineraries = tierraMedia.getItineraries(user);
 		
 		Assert.assertEquals(2, itineraries.size());
 		
@@ -41,11 +40,11 @@ public class SecretaryTurismTest {
 		List<Attraction> attractions = generateAtractionsList() ;
 		List<Promotion> promotions = generatePromotionsList(attractions);
 		
-		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
+		SecretaryTurism tierraMedia = new SecretaryTurism(promotions, attractions, invalidDate());
 		
 		User user = new User(2000, 72, 20, AttractionType.CAMPING);
 		
-		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		List<Itinerary> itineraries = tierraMedia.getItineraries(user);
 		
 		Assert.assertEquals(2000, itineraries.get(0).getTotalCost(), 0.1);
 		
@@ -56,11 +55,11 @@ public class SecretaryTurismTest {
 		List<Attraction> attractions = generateAtractionsList() ;
 		List<Promotion> promotions = generatePromotionsList(attractions);
 		
-		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
+		SecretaryTurism tierraMedia = new SecretaryTurism(promotions, attractions, invalidDate());
 		
 		User user = new User(2000, 72, 20, AttractionType.CAMPING);
 		
-		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		List<Itinerary> itineraries = tierraMedia.getItineraries(user);
 		
 		Assert.assertEquals(4, itineraries.get(0).getAttractions().size());
 		
@@ -71,11 +70,11 @@ public class SecretaryTurismTest {
 		List<Attraction> attractions = generateAtractionsList() ;
 		List<Promotion> promotions = generatePromotionsList(attractions);
 		
-		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, invalidDate());
+		SecretaryTurism tierraMedia = new SecretaryTurism(promotions, attractions, invalidDate());
 		
 		User user = new User(2000, 72, 20, AttractionType.CAMPING);
 		
-		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		List<Itinerary> itineraries = tierraMedia.getItineraries(user);
 		
 		Assert.assertEquals(2, itineraries.get(1).getAttractions().size());
 		
@@ -87,11 +86,11 @@ public class SecretaryTurismTest {
 		List<Promotion> promotions = new ArrayList<Promotion>();
 		promotions.add(createAbsolutePromotion(attractions));
 		
-		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, validDate());
+		SecretaryTurism tierraMedia = new SecretaryTurism(promotions, attractions, validDate());
 		
 		User user = new User(2000, 72, 20, AttractionType.CAMPING);
 		
-		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		List<Itinerary> itineraries = tierraMedia.getItineraries(user);
 		
 		Assert.assertEquals(1700, itineraries.get(0).getTotalCost(), 0.1);
 		
@@ -103,14 +102,29 @@ public class SecretaryTurismTest {
 		List<Promotion> promotions = new ArrayList<Promotion>();
 		promotions.add(createPercentagePromotion(attractions));
 		
-		SecretaryTurism secretaryTurism = new SecretaryTurism(promotions, attractions, validDate());
+		SecretaryTurism tierraMedia = new SecretaryTurism(promotions, attractions, validDate());
 		
 		User user = new User(2000, 72, 20, AttractionType.CAMPING);
 		
-		List<Itinerary> itineraries = secretaryTurism.getItineraries(user);
+		List<Itinerary> itineraries = tierraMedia.getItineraries(user);
 		
 		Assert.assertEquals(1750, itineraries.get(0).getTotalCost(), 0.1);
 		
+	}
+	
+	@Test
+	public void whenAskForItinerariesThenOneItineraryHasAXBPromotionAvailableAndApply() {
+		List<Attraction> attractions = generateAtractionsList() ;
+		List<Promotion> promotions = new ArrayList<Promotion>();
+		promotions.add(createAXBPromotion(attractions));
+				
+		SecretaryTurism tierraMedia = new SecretaryTurism(promotions, attractions, validDate());
+		
+		User user = new User(2000, 72, 20, AttractionType.CAMPING);
+		
+		List<Itinerary> itineraries = tierraMedia.getItineraries(user);
+		
+		Assert.assertEquals(1500, itineraries.get(0).getTotalCost(), 0.1);
 	}
 
 	
@@ -130,7 +144,7 @@ public class SecretaryTurismTest {
 
 	private AXBPromotion createAXBPromotion(List<Attraction> attractions) {
 		List<Attraction> attractionsAXBPromotion = new ArrayList<Attraction>() ;
-		attractionsAXBPromotion.add(attractions.get(5));
+		attractionsAXBPromotion.add(attractions.get(1));
 		attractionsAXBPromotion.add(attractions.get(3));
 		
 		return new AXBPromotion(startDate(), endDate(), attractionsAXBPromotion, attractions.get(2));

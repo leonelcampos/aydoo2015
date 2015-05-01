@@ -11,7 +11,6 @@ public class PercentagePromotion implements Promotion{
 	private Date endDate;
 	private int percentage;
 	private List<Attraction> attractions = new ArrayList<Attraction>();
-	private double totalAverageTime;
 	
 	public PercentagePromotion(Date startDate, Date endDate, int percentage,
 			List<Attraction> attractions) {
