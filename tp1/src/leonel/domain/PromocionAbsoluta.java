@@ -45,8 +45,5 @@ public class PromocionAbsoluta extends Promocion{
 		return atracciones;
 	}
 
-	public boolean estaVigente(Date fecha) {
-		return (fechaDeInicio.before(fecha))&&(fechaDeFinalizacion.after(fecha));
-	}
 	
 }

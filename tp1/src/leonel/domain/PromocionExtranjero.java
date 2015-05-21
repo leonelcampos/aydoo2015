@@ -1,33 +1,30 @@
 package domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PromocionPorcentual extends Promocion{
+public class PromocionExtranjero extends Promocion{
 
-	
+
 	private Date fechaDeInicio;
 	private Date fechaDeFinalizacion;
-	private int porcentaje;
-	private List<Atraccion> atracciones = new ArrayList<Atraccion>();
 	
-	public PromocionPorcentual(Date fechaDeInicio, Date fechaDeFinalizacion, int porcentaje,
-			List<Atraccion> atracciones) {
+	public PromocionExtranjero(Date fechaDeInicio, Date fechaDeFinalizacion){
+		
 		this.fechaDeInicio = fechaDeInicio;
 		this.fechaDeFinalizacion = fechaDeFinalizacion;
-		this.porcentaje = porcentaje;
-		this.atracciones = atracciones;
+		
 	}
-
+	
 	@Override
 	public Date getFechaDeInicio() {
-		return fechaDeInicio;
+		return this.fechaDeInicio;
 	}
 
 	@Override
 	public void setFechaDeInicio(Date fechaDeInicio) {
 		this.fechaDeInicio = fechaDeInicio;
+		
 	}
 
 	@Override
@@ -41,17 +38,29 @@ public class PromocionPorcentual extends Promocion{
 		
 	}
 
-
+	@Override
 	public List<Atraccion> getAtracciones() {
-		return atracciones;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-
+	@Override
 	public double getCostoPromocion() {
-		double cost = calcularCosto(this.getAtracciones());
-		cost = cost- ((cost * porcentaje)/100);
-		
-		return cost;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
+	public double aplicarCostoDePromocion(Date fecha, List<Atraccion> atracciones) {
+		
+		double costoTotal = calcularCosto(atracciones);
+		
+		if(estaVigente(fecha)){
+			
+			costoTotal = costoTotal - (costoTotal*0.5);
+			
+		}
+		
+		return costoTotal;
+		
+	}
 }

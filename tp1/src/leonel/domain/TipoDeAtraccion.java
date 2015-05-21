@@ -1,5 +1,5 @@
 package domain;
 
-public enum tipoDeAtraccion {
+public enum TipoDeAtraccion {
 	MUSEO, ACAMPAR, PARACAIDISMO, PAISAJE, AVENTURA
 }

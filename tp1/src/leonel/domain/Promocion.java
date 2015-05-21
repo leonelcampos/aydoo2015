@@ -17,7 +17,9 @@ public abstract class Promocion {
 
 	public abstract double getCostoPromocion();
 
-	public abstract boolean estaVigente(Date fecha);
+	public boolean estaVigente(Date fecha) {
+		return (getFechaDeInicio().before(fecha))&&(getFechaDeFinalizacion().after(fecha));
+	}
 	
 	public double aplicarCostoDePromocion(Date fecha,
 			List<Atraccion> atracciones, double costoTotalAcumulado) {
@@ -31,7 +33,7 @@ public abstract class Promocion {
 		return costoTotalAcumulado;
 	}
 	
-	protected double calcularCosto(List<Atraccion> atracciones){
+	public double calcularCosto(List<Atraccion> atracciones){
 		double costo = 0;
 		for (Atraccion attraction : atracciones) {
 			costo += attraction.getCosto();

@@ -5,12 +5,13 @@ public class Usuario {
 	private double dinero;
 	private double tiempoDisponible;
 	private double velocidad;
-	private tipoDeAtraccion atraccionFavorita;
+	private TipoDeAtraccion atraccionFavorita;
+	private Posicion posicion;
 	
-	
-	public Usuario(double many, double tiempoDisponible, double speed,
-			tipoDeAtraccion favoriteAttraction) {
-
+	public Usuario(Posicion posicion, double many, double tiempoDisponible, double speed,
+			TipoDeAtraccion favoriteAttraction) {
+		
+		this.posicion = posicion;
 		this.dinero = many;
 		this.tiempoDisponible = tiempoDisponible;
 		this.velocidad = speed;
@@ -18,44 +19,57 @@ public class Usuario {
 	}
 
 
-	public double getMany() {
+	public double getDinero() {
 		return dinero;
 	}
 
 
-	public void setMany(double many) {
-		this.dinero = many;
+	public void setDinero(double dinero) {
+		this.dinero = dinero;
 	}
 
 
-	public double getAvailableTime() {
+	public double getTiempoDisponible() {
 		return tiempoDisponible;
 	}
 
 
-	public void setAvailableTime(double availableTime) {
-		this.tiempoDisponible = availableTime;
+	public void setTiempoDisponible(double tiempoDisponible) {
+		this.tiempoDisponible = tiempoDisponible;
 	}
 
 
-	public double getSpeed() {
+	public double getVelocidad() {
 		return velocidad;
 	}
 
 
-	public void setSpeed(double speed) {
-		this.velocidad = speed;
+	public void setVelocidad(double velocidad) {
+		this.velocidad = velocidad;
 	}
 
 
-	public tipoDeAtraccion getFavoriteAttraction() {
+	public TipoDeAtraccion getAtraccionFavorita() {
 		return atraccionFavorita;
 	}
 
 
-	public void setFavoriteAttraction(tipoDeAtraccion favoriteAttraction) {
-		this.atraccionFavorita = favoriteAttraction;
+	public void setAtraccionFavorita(TipoDeAtraccion atraccionFavorita) {
+		this.atraccionFavorita = atraccionFavorita;
 	}
+
+
+	public Posicion getPosicion() {
+		return posicion;
+	}
+
+
+	public void setPosicion(Posicion posicion) {
+		this.posicion = posicion;
+	}
+
+
+	
 	
 	
 	

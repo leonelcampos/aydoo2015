@@ -1,31 +1,24 @@
 package domain;
 
 public class Atraccion {
-	private int posicionX;
-	private int posicionY;
+	private Posicion posicion;
 	private double costo;
 	private double tiempoPromedio;
-	private tipoDeAtraccion tipoAtraccion;
+	private TipoDeAtraccion tipoAtraccion;
 	private int disponibilidad;
 	
-	public Atraccion(int posicionX, int posicionY, double costo,
-			double tiempoPromedio, int disponibilidad,  tipoDeAtraccion tipoDeAtraccion ) {
+	public Atraccion(Posicion posicion, double costo,
+			double tiempoPromedio, int disponibilidad,  TipoDeAtraccion tipoDeAtraccion ) {
 
-		this.posicionX = posicionX;
-		this.posicionY = posicionY;
+		this.posicion = posicion;
 		this.costo = costo;
 		this.tiempoPromedio = tiempoPromedio;
 		this.disponibilidad = disponibilidad;
 		this.tipoAtraccion = tipoDeAtraccion;
 	}
 
-	public int getPosicionX() {
-		return posicionX;
-	}
-
-
-	public int getPosicionY() {
-		return posicionY;
+	public Posicion getPosicion(){
+		return posicion;
 	}
 
 	public double getCosto() {
@@ -52,11 +45,11 @@ public class Atraccion {
 		this.disponibilidad = disponibilidad;
 	}
 
-	public tipoDeAtraccion getTipoDeAtraccion() {
+	public TipoDeAtraccion getTipoDeAtraccion() {
 		return tipoAtraccion;
 	}
 
-	public void setTimpoDeAtraccion(tipoDeAtraccion tipoDeAtraccion) {
+	public void setTimpoDeAtraccion(TipoDeAtraccion tipoDeAtraccion) {
 		this.tipoAtraccion = tipoDeAtraccion;
 	}
 	

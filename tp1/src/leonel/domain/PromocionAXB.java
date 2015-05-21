@@ -54,8 +54,6 @@ public class PromocionAXB extends Promocion{
 	}
 
 
-
-	@Override
 	public List<Atraccion> getAtracciones() {
 		List<Atraccion> attractions = new ArrayList<Atraccion>();
 		attractions.addAll(atraccionesObligatorias);
@@ -66,7 +64,6 @@ public class PromocionAXB extends Promocion{
 
 
 
-	@Override
 	public double getCostoPromocion() {
 		int costo = 0;
 		for (Atraccion attraction : atraccionesObligatorias) {
@@ -74,13 +71,6 @@ public class PromocionAXB extends Promocion{
 		}
 		
 		return costo;
-	}
-
-
-
-	@Override
-	public boolean estaVigente(Date fecha) {
-		return (fechaDeInicio.before(fecha))&&(fechaDeFinalizacion.after(fecha));
 	}
 
 
