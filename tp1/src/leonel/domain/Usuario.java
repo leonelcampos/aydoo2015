@@ -7,15 +7,17 @@ public class Usuario {
 	private double velocidad;
 	private TipoDeAtraccion atraccionFavorita;
 	private Posicion posicion;
+	private int grupoFamiliar;
 	
 	public Usuario(Posicion posicion, double many, double tiempoDisponible, double speed,
-			TipoDeAtraccion favoriteAttraction) {
+			TipoDeAtraccion favoriteAttraction, int grupoFamiliar) {
 		
 		this.posicion = posicion;
 		this.dinero = many;
 		this.tiempoDisponible = tiempoDisponible;
 		this.velocidad = speed;
 		this.atraccionFavorita = favoriteAttraction;
+		this.grupoFamiliar = grupoFamiliar;
 	}
 
 
@@ -69,8 +71,13 @@ public class Usuario {
 	}
 
 
-	
-	
-	
+	public int getGrupoFamiliar() {
+		return grupoFamiliar;
+	}
+
+
+	public void setGrupoFamiliar(int grupoFamiliar) {
+		this.grupoFamiliar = grupoFamiliar;
+	}
 	
 }

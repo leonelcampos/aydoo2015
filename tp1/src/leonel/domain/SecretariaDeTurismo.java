@@ -6,122 +6,79 @@ import java.util.List;
 
 public class SecretariaDeTurismo {
 
-	private List<Promocion> promociones;
+	private List<PromocionAcumulable> promocionesAcumulables;
 
 	private List<Atraccion> atracciones;
 
-	private PromocionExtranjero promocionExtranjero;
+	private PromocionNoAcumulable promocionExtranjero;
 
-	private PromocionFamiliar promocionFamiliar;
-
-	public SecretariaDeTurismo(List<Promocion> promociones,
-			List<Atraccion> atracciones) {
-		this.promociones = promociones;
+	public SecretariaDeTurismo(List<PromocionAcumulable> promocionesAcumulables,
+			PromocionNoAcumulable promocionNoAcumulable, List<Atraccion> atracciones) {
+		this.promocionesAcumulables = promocionesAcumulables;
 		this.atracciones = atracciones;
-		this.promocionFamiliar = obtenerPromocionFamiliarDePromociones();
-		this.promocionExtranjero = obtenerPromocionExtranjeroDePromociones();
+		this.promocionExtranjero = promocionNoAcumulable;
 	}
 
-	private PromocionExtranjero obtenerPromocionExtranjeroDePromociones() {
-		PromocionExtranjero promocionExtranjero = null;
-
-		for (Promocion promocion : promociones) {
-			if (promocion instanceof PromocionExtranjero) {
-
-				promocionExtranjero = (PromocionExtranjero) promocion;
-			}
-		}
-
-		promociones.remove(promocionExtranjero);
-
-		return promocionExtranjero;
-	}
-
-	private PromocionFamiliar obtenerPromocionFamiliarDePromociones() {
-
-		PromocionFamiliar promocionFamiliar = null;
-
-		for (Promocion promocion : promociones) {
-			if (promocion instanceof PromocionFamiliar) {
-
-				promocionFamiliar = (PromocionFamiliar) promocion;
-			}
-		}
-
-		promociones.remove(promocionFamiliar);
-
-		return promocionFamiliar;
-	}
-
-	public List<Promocion> getPromociones() {
-		return promociones;
+	public List<PromocionAcumulable> getPromociones() {
+		return promocionesAcumulables;
 	}
 
 	public List<Atraccion> getAtracciones() {
 		return atracciones;
 	}
 
-	public List<Sugerencia> generarSugerencias(Usuario usuario, Date fecha,
-			int cantidadDeEntradas) {
+	public List<Sugerencia> generarSugerencias(Usuario usuario, Date fecha) {
 
 		List<Sugerencia> sugerencias = new ArrayList<>();
 		List<Atraccion> atraccionesFiltradasParaElUsuario = getAtraccionesApropiadasParaElUsuario(
-				usuario, cantidadDeEntradas);
-		double distancia;
+				usuario, usuario.getGrupoFamiliar());
 
 		sugerencias = obtenerListaDeSugerenciasAjustadasAlUsuario(usuario,
 				atraccionesFiltradasParaElUsuario);
 
 		completarTiempoYCostoASugerencias(sugerencias, usuario);
-
-		for (Sugerencia sugerencia : sugerencias) {
-			distancia = calcularAtraccionConMenorDistancia(
-					sugerencia.getAtracciones(), usuario.getPosicion());
-
-			if (distancia > 200) {
-				aplicarPromocionExtranjero(sugerencia, cantidadDeEntradas,
-						fecha);
-			} else {
-				aplicarPromociones(sugerencia, cantidadDeEntradas, fecha);
-			}
+		
+		if (verificarUsuarioExtranjero(usuario)) {
+				aplicarPromocionExtranjero(sugerencias, usuario.getGrupoFamiliar(),fecha); 
+		} else {
+				aplicarPromocionesAcumulables(sugerencias, usuario.getGrupoFamiliar(), fecha);
 		}
-
 		return sugerencias;
-
 	}
 
-	private void aplicarPromocionExtranjero(Sugerencia sugerencia,
+	private boolean verificarUsuarioExtranjero(Usuario usuario) {
+		double distanciaAtraccionMasCercana = obtenerDistanciaAAtraccionMasCercana(usuario.getPosicion());
+		if(distanciaAtraccionMasCercana > 200){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	private void aplicarPromocionExtranjero(List<Sugerencia> sugerencias,
 			int cantidadDeEntradas, Date fecha) {
-
-		double costo = promocionExtranjero.aplicarCostoDePromocion(fecha,
-				sugerencia.getAtracciones());
-
-		sugerencia.setCostoXPersona(costo);
-		sugerencia.setCostoXCantidadDeEntradas(cantidadDeEntradas * costo);
+		double costo;
+		for (Sugerencia sugerencia : sugerencias) {
+			costo = promocionExtranjero.aplicarCostoDePromocion(fecha,
+					sugerencia.getAtracciones());
+			sugerencia.setCostoTotal(costo*cantidadDeEntradas);
+		}
 	}
 
-	private void aplicarPromociones(Sugerencia sugerencia,
+	private void aplicarPromocionesAcumulables(List<Sugerencia> sugerencias,
 			int cantidadDeEntradas, Date fecha) {
 		double costo = 0;
+		
+		for (Sugerencia sugerencia : sugerencias) {
+			costo = sugerencia.getCostoTotal();
 
-		costo = sugerencia.getCostoXPersona();
+			for (PromocionAcumulable promocion : promocionesAcumulables) {
 
-		for (Promocion promocion : promociones) {
-
-			costo = promocion.aplicarCostoDePromocion(fecha,
-					sugerencia.getAtracciones(), costo);
+				costo = promocion.aplicarCostoDePromocion(fecha,
+						sugerencia.getAtracciones(), costo, cantidadDeEntradas);
+			}
+			sugerencia.setCostoTotal(costo);
 		}
-
-		sugerencia.setCostoXPersona(costo);
-
-		if (promocionFamiliar != null) {
-			sugerencia.setCostoXCantidadDeEntradas(promocionFamiliar
-					.aplicarCostoDePromocion(fecha, atracciones, costo,
-							cantidadDeEntradas));
-		} else {
-			sugerencia.setCostoXCantidadDeEntradas(costo * cantidadDeEntradas);
-		}
-
 	}
 
 	private void completarTiempoYCostoASugerencias(
@@ -131,12 +88,11 @@ public class SecretariaDeTurismo {
 		double tiempo = 0;
 		for (Sugerencia sugerencia : sugerencias) {
 
-			costo = calcularCostoAtracciones(sugerencia.getAtracciones());
+			costo = calcularCostoAtracciones(sugerencia.getAtracciones())* usuario.getGrupoFamiliar();
 			tiempo = calcularTiempoTotal(sugerencia.getAtracciones(), usuario);
 
-			sugerencia.setCostoXPersona(costo);
+			sugerencia.setCostoTotal(costo);
 			sugerencia.setTiempoTotal(tiempo);
-
 		}
 
 	}
@@ -144,44 +100,38 @@ public class SecretariaDeTurismo {
 	private List<Sugerencia> obtenerListaDeSugerenciasAjustadasAlUsuario(
 			Usuario usuario, List<Atraccion> atraccionesFiltradasParaElUsuario) {
 		List<Sugerencia> sugerencias = new ArrayList<Sugerencia>();
-		Sugerencia sugerencia = new Sugerencia(new ArrayList<Atraccion>(), 0,
-				0, 0);
+		List<Atraccion> atracciones = new ArrayList<Atraccion>();
+		Sugerencia sugerencia = new Sugerencia(new ArrayList<Atraccion>(), 0,0);
 		Atraccion atraccion = null;
 
 		for (int i = 0; i < atraccionesFiltradasParaElUsuario.size(); i++) {
-			atraccion = atracciones.get(i);
-			sugerencia.addAtraccion(atraccion);
-
-			sugerencia = generarSugerenciaAjustadaAlUsuario(usuario,
-					sugerencia, sugerencias, atraccion);
+			atraccion = atraccionesFiltradasParaElUsuario.get(i);
+			if(verificarAtraccionesApropiadasParaElUsuario(atracciones, atraccion, usuario)){
+				atracciones.add(atraccion);
+			}else{
+				sugerencia.setAtracciones(atracciones);
+				sugerencias.add(sugerencia);
+				sugerencia = new Sugerencia(null, 0, 0);
+				atracciones = new ArrayList<Atraccion>();
+				atracciones.add(atraccion);
+			}
 		}
+		
+		sugerencia.setAtracciones(atracciones);
 		sugerencias.add(sugerencia);
 
 		return sugerencias;
 	}
 
-	private Sugerencia generarSugerenciaAjustadaAlUsuario(Usuario usuario,
-			Sugerencia sugerencia, List<Sugerencia> sugerencias,
-			Atraccion atraccion) {
-
-		if (!verificarAtraccionesApropiadasParaElUsuario(sugerencia, usuario)) {
-
-			sugerencia.getAtracciones().remove(atraccion);
-			sugerencias.add(sugerencia);
-			sugerencia = new Sugerencia(new ArrayList<Atraccion>(), 0, 0, 0);
-			sugerencia.addAtraccion(atraccion);
-		}
-
-		return sugerencia;
-	}
-
 	private boolean verificarAtraccionesApropiadasParaElUsuario(
-			Sugerencia sugerencia, Usuario usuario) {
-
-		double costoTotal = calcularCostoAtracciones(sugerencia
-				.getAtracciones());
-		double tiempoTotal = calcularTiempoTotal(sugerencia.getAtracciones(),
-				usuario);
+			List<Atraccion> atracciones, Atraccion atraccion, Usuario usuario) {
+		
+		List<Atraccion> atraccionesAEvaluar = new ArrayList<Atraccion>();
+		atraccionesAEvaluar.addAll(atracciones);
+		atraccionesAEvaluar.add(atraccion);
+		
+		double costoTotal = calcularCostoAtracciones(atraccionesAEvaluar);
+		double tiempoTotal = calcularTiempoTotal(atraccionesAEvaluar, usuario);
 
 		if (verificarCosto(usuario, costoTotal)
 				&& verificarTiempo(usuario, tiempoTotal)) {
@@ -189,7 +139,6 @@ public class SecretariaDeTurismo {
 		} else {
 			return false;
 		}
-
 	}
 
 	private List<Atraccion> getAtraccionesApropiadasParaElUsuario(Usuario user,
@@ -208,18 +157,18 @@ public class SecretariaDeTurismo {
 
 	}
 
-	private boolean verificarTiempo(Usuario user, double totalTime) {
-		return user.getTiempoDisponible() >= totalTime;
+	private boolean verificarTiempo(Usuario user, double tiempoTotal) {
+		return user.getTiempoDisponible() >= tiempoTotal;
 	}
 
-	private boolean verificarCosto(Usuario user, double totalCost) {
-		return user.getDinero() >= totalCost;
+	private boolean verificarCosto(Usuario usuario, double costoTotal) {
+		return usuario.getDinero() >= costoTotal*usuario.getGrupoFamiliar();
 	}
 
-	private boolean verificarAtraccionesDisponibles(Atraccion attraction,
+	private boolean verificarAtraccionesDisponibles(Atraccion atraccion,
 			int cantidadDeEntradas) {
 
-		return (attraction.getDisponibilidad() - cantidadDeEntradas > 0);
+		return ((atraccion.getDisponibilidad() - cantidadDeEntradas) > 0);
 	}
 
 	private double calcularCostoAtracciones(List<Atraccion> atracciones) {
@@ -230,16 +179,15 @@ public class SecretariaDeTurismo {
 		return cost;
 	}
 
-	private double calcularAtraccionConMenorDistancia(
-			List<Atraccion> atracciones, Posicion posicion) {
+	private double obtenerDistanciaAAtraccionMasCercana(Posicion posicionUsuario) {
 		double distancia = 0;
 		double siguienteDistancia = 0;
-		for (int i = 0; i < atracciones.size(); i++) {
+		for (int i = 0; i < this.atracciones.size(); i++) {
 			if (i == 0) {
-				distancia = calcularDistancia(posicion, atracciones.get(0)
+				distancia = calcularDistancia(posicionUsuario, this.atracciones.get(0)
 						.getPosicion());
 			} else {
-				siguienteDistancia = calcularDistancia(posicion, atracciones
+				siguienteDistancia = calcularDistancia(posicionUsuario, this.atracciones
 						.get(i).getPosicion());
 				if (distancia > siguienteDistancia) {
 					distancia = siguienteDistancia;

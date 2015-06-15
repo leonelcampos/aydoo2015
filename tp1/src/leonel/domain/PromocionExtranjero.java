@@ -3,7 +3,7 @@ package domain;
 import java.util.Date;
 import java.util.List;
 
-public class PromocionExtranjero extends Promocion{
+public class PromocionExtranjero implements PromocionNoAcumulable{
 
 
 	private Date fechaDeInicio;
@@ -37,30 +37,26 @@ public class PromocionExtranjero extends Promocion{
 		this.fechaDeFinalizacion = fechaDeFinalizacion;
 		
 	}
-
-	@Override
-	public List<Atraccion> getAtracciones() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double getCostoPromocion() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	
 	public double aplicarCostoDePromocion(Date fecha, List<Atraccion> atracciones) {
-		
 		double costoTotal = calcularCosto(atracciones);
 		
 		if(estaVigente(fecha)){
 			
 			costoTotal = costoTotal - (costoTotal*0.5);
-			
 		}
-		
 		return costoTotal;
-		
+	}
+	
+	public boolean estaVigente(Date fecha) {
+		return (getFechaDeInicio().before(fecha))&&(getFechaDeFinalizacion().after(fecha));
+	}
+	
+	public double calcularCosto(List<Atraccion> atracciones){
+		double costo = 0;
+		for (Atraccion attraction : atracciones) {
+			costo += attraction.getCosto();
+		}
+		return costo;
 	}
 }

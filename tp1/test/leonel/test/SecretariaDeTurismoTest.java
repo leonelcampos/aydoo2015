@@ -8,17 +8,18 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import domain.Atraccion;
 import domain.Posicion;
 import domain.PromocionAXB;
 import domain.PromocionAbsoluta;
-import domain.Atraccion;
+import domain.PromocionAcumulable;
 import domain.PromocionExtranjero;
 import domain.PromocionFamiliar;
-import domain.TipoDeAtraccion;
-import domain.Sugerencia;
+import domain.PromocionNoAcumulable;
 import domain.PromocionPorcentual;
-import domain.Promocion;
 import domain.SecretariaDeTurismo;
+import domain.Sugerencia;
+import domain.TipoDeAtraccion;
 import domain.Usuario;
 
 public class SecretariaDeTurismoTest {
@@ -26,66 +27,65 @@ public class SecretariaDeTurismoTest {
 	@Test
 	public void cuandoSeGeneranLasSugerenciasEntoncesLaSecretariaDeTurismoDevuelveDos() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = generarListaDePromociones(atracciones);
+		List<PromocionAcumulable> promociones = generarListaDePromociones(atracciones);
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR, 1);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente());
 		
 		Assert.assertEquals(2, sugerencias.size());
-		
 	}
 	
 	@Test
 	public void cuandoSeGeneranLaPrimeraSugerenciasEntoncesEstaEsCreadaConUnTiempoTotalDeterminado() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = generarListaDePromociones(atracciones);
+		List<PromocionAcumulable> promociones = generarListaDePromociones(atracciones);
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null,  atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR, 1);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente());
 		
 		Assert.assertEquals(61.33, sugerencias.get(0).getTiempoTotal(), 0.1);
 		
 	}
 	
 	@Test
-	public void cuandoSeGeneranLasSugerenciasEntoncesEstasSeCreanConUnCostoDeterminado() {
+	public void cuandoSeGeneranLasSugerenciasEntoncesEstaSeCreanConUnCostoDeterminado() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = generarListaDePromociones(atracciones);
+		List<PromocionAcumulable> promociones = generarListaDePromociones(atracciones);
 		
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR, 1);
 		
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente());
 		
-		Assert.assertEquals(2000, sugerencias.get(0).getCostoXPersona(), 0.01);
+		Assert.assertEquals(2000, sugerencias.get(0).getCostoTotal(), 0.01);
 		
 	}
 	
 	@Test
 	public void cuandoSeGeneraLaPrimerSugerenciaEstaEsCreadaConCuatroAtraciones() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = generarListaDePromociones(atracciones);
+		List<PromocionAcumulable> promociones = generarListaDePromociones(atracciones);
 		
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, null,atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR, 1);
 		
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente());
 		
 		Assert.assertEquals(4, sugerencias.get(0).getAtracciones().size());
 		
@@ -94,16 +94,16 @@ public class SecretariaDeTurismoTest {
 	@Test
 	public void cuandoSeGeneraLaSegundaSugerenciaEstaEsCreadaConDosAtreacciones() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = generarListaDePromociones(atracciones);
+		List<PromocionAcumulable> promociones = generarListaDePromociones(atracciones);
 		
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 2000, 72, 20, TipoDeAtraccion.ACAMPAR,1);
 		
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaNoVigente());
 		
 		Assert.assertEquals(2, sugerencias.get(1).getAtracciones().size());
 		
@@ -112,116 +112,131 @@ public class SecretariaDeTurismoTest {
 	@Test
 	public void cuandosSeGeneraLaPrimeraSugerenciaEstaTieneAplicadaPromocionAbsolutaEnElCosto() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = new ArrayList<Promocion>();
+		List<PromocionAcumulable> promociones = new ArrayList<PromocionAcumulable>();
 		promociones.add(crearPromocionAbsoluta(atracciones));
 		
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR,1);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente());
 		
-		Assert.assertEquals(900, sugerencias.get(0).getCostoXPersona(), 0.01);
-		
+		Assert.assertEquals(900, sugerencias.get(0).getCostoTotal(), 0.01);	
 	}
 	
 	@Test
 	public void cuandosSeGeneraLaPrimeraSugerenciaEstaTieneAplicadaPromocionPorcentualEnElCosto() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = new ArrayList<Promocion>();
+		List<PromocionAcumulable> promociones = new ArrayList<PromocionAcumulable>();
 		promociones.add(crearPromocionPorcentual(atracciones));
 		
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR,1);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente());
 		
-		Assert.assertEquals(1325, sugerencias.get(0).getCostoXPersona(), 0.01);
+		Assert.assertEquals(1325, sugerencias.get(0).getCostoTotal(), 0.01);
 		
 	}
 	
 	@Test
 	public void cuandosSeGeneraLaPrimeraSugerenciaEstaTieneAplicadaPromocionAXBEnElCosto() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = new ArrayList<Promocion>();
+		List<PromocionAcumulable> promociones = new ArrayList<PromocionAcumulable>();
 		promociones.add(crearPromocionAXB(atracciones));
 				
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR,1);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente(), 1);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente());
 		
-		Assert.assertEquals(1500, sugerencias.get(0).getCostoXPersona(), 0.01);
+		Assert.assertEquals(1500, sugerencias.get(0).getCostoTotal(), 0.01);
 	}
 	
 	@Test
 	public void cuandosSeGeneraLaPrimeraSugerenciaEstaTieneAplicadaPromocionFamiliarConDescuentoDeCuatroEntradas() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = new ArrayList<Promocion>();
+		List<PromocionAcumulable> promociones = new ArrayList<PromocionAcumulable>();
 		promociones.add(crearPromocionFamiliar());
 				
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 8000, 72, 20, TipoDeAtraccion.ACAMPAR, 4);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente(), 4);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente());
 		
-		Assert.assertEquals(5400, sugerencias.get(0).getCostoXCantidadDeEntradas(), 0.01);
+		Assert.assertEquals(7200, sugerencias.get(0).getCostoTotal(), 0.01);
 	}
 
 	
 	@Test
 	public void cuandosSeGeneraLaPrimeraSugerenciaEstaTieneAplicadaPromocionFamiliarConDescuentoDeSeisEntradas() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = new ArrayList<Promocion>();
+		List<PromocionAcumulable> promociones = new ArrayList<PromocionAcumulable>();
 		promociones.add(crearPromocionFamiliar());
 				
 		Posicion posicionUsuario = new Posicion(30,50);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 12000, 72, 20, TipoDeAtraccion.ACAMPAR,6);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente(), 6);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente());
 		
-		Assert.assertEquals(7500, sugerencias.get(0).getCostoXCantidadDeEntradas(), 0.01);
+		Assert.assertEquals(10000, sugerencias.get(0).getCostoTotal(), 0.01);
+	}
+	
+	@Test
+	public void cuandosSeGeneraLaPrimeraSugerenciaParaTresPersonasNoSeAplicaLaPromocionFamiliar() {
+		List<Atraccion> atracciones = generarListaDeAtracciones() ;
+		List<PromocionAcumulable> promociones = new ArrayList<PromocionAcumulable>();
+		promociones.add(crearPromocionFamiliar());
+				
+		Posicion posicionUsuario = new Posicion(30,50);
+				
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones,null, atracciones);
+		
+		Usuario usuario = new Usuario(posicionUsuario, 6000, 72, 20, TipoDeAtraccion.ACAMPAR,3);
+		
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente());
+		
+		Assert.assertEquals(6000, sugerencias.get(0).getCostoTotal(), 0.01);
 	}
 	
 	@Test
 	public void cuandosSeGeneraLaPrimeraSugerenciaEstaTieneAplicadaPromocionExtranjero() {
 		List<Atraccion> atracciones = generarListaDeAtracciones() ;
-		List<Promocion> promociones = new ArrayList<Promocion>();
-		promociones.add(crearPromocionExtranjero());
+		PromocionNoAcumulable promocionExtranjero = crearPromocionExtranjero();
 				
 		Posicion posicionUsuario = new Posicion(300,300);
 		
-		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(promociones, atracciones);
+		SecretariaDeTurismo tierraMedia = new SecretariaDeTurismo(null,promocionExtranjero, atracciones);
 		
-		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR);
+		Usuario usuario = new Usuario(posicionUsuario, 1900, 72, 20, TipoDeAtraccion.ACAMPAR,1);
 		
-		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente(), 6);
+		List<Sugerencia> sugerencias = tierraMedia.generarSugerencias(usuario, fechaVigente());
 		
-		Assert.assertEquals(750, sugerencias.get(0).getCostoXPersona(), 0.01);
+		Assert.assertEquals(750, sugerencias.get(0).getCostoTotal(), 0.01);
 	}
 	
 	
-	private List<Promocion> generarListaDePromociones(List<Atraccion> atracciones){
+	private List<PromocionAcumulable> generarListaDePromociones(List<Atraccion> atracciones){
 		
-		Promocion promocionAbsoluta = crearPromocionAbsoluta(atracciones);
- 		Promocion promocionPorcentual = crearPromocionPorcentual(atracciones);
- 		Promocion PromocionAxB = crearPromocionAXB(atracciones);
+		PromocionAcumulable promocionAbsoluta = crearPromocionAbsoluta(atracciones);
+ 		PromocionAcumulable promocionPorcentual = crearPromocionPorcentual(atracciones);
+ 		PromocionAcumulable PromocionAxB = crearPromocionAXB(atracciones);
  		
- 		List<Promocion> promociones = new ArrayList<Promocion>();
+ 		List<PromocionAcumulable> promociones = new ArrayList<PromocionAcumulable>();
  		promociones.add(promocionAbsoluta);
  		promociones.add(promocionPorcentual);
  		promociones.add(PromocionAxB);

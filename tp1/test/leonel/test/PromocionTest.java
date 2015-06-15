@@ -76,9 +76,10 @@ public class PromocionTest {
 		PromocionFamiliar promocionFamiliar = new PromocionFamiliar(fechaInicio(), fechaFin());
 		
 		double costExpected = 4320;
-		double costoDeAtracciones = calcularCostoDeAtracciones(atracciones);
+		double costoDeAtracciones = calcularCostoDeAtracciones(atracciones, 4);
 		
-		Assert.assertEquals( costExpected, promocionFamiliar.aplicarCostoDePromocion(fechaVigente(), atracciones, costoDeAtracciones, 4), 0.1);
+		Assert.assertEquals( costExpected, promocionFamiliar.aplicarCostoDePromocion(
+				fechaVigente(), atracciones, costoDeAtracciones, 4), 0.1);
 		
 	}
 	
@@ -89,13 +90,11 @@ public class PromocionTest {
 		PromocionFamiliar promocionFamiliar = new PromocionFamiliar(fechaInicio(), fechaFin());
 		
 		double costExpected = 6000;
-		double costoDeAtracciones = calcularCostoDeAtracciones(atracciones);
+		double costoDeAtracciones = calcularCostoDeAtracciones(atracciones,6);
 		
 		Assert.assertEquals( costExpected, promocionFamiliar.aplicarCostoDePromocion(fechaVigente(), atracciones, costoDeAtracciones, 6), 0.1);
 		
 	}
-	
-	
 	
 	private Date fechaVigente(){
 		Calendar ahoraCal = Calendar.getInstance();
@@ -104,12 +103,12 @@ public class PromocionTest {
 		return ahoraCal.getTime();
 	}
 	
-	private double calcularCostoDeAtracciones(List<Atraccion> atracciones){
+	private double calcularCostoDeAtracciones(List<Atraccion> atracciones, int cantidadDeEntradas){
 		double costo = 0;
 		for (Atraccion attraction : atracciones) {
 			costo += attraction.getCosto();
 		}
-		return costo;
+		return costo*cantidadDeEntradas;
 	}
 	
 	

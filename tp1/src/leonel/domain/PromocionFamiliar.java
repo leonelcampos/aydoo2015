@@ -3,7 +3,7 @@ package domain;
 import java.util.Date;
 import java.util.List;
 
-public class PromocionFamiliar extends Promocion{
+public class PromocionFamiliar extends PromocionAcumulable{
 
 	private Date fechaInicio;
 	
@@ -47,24 +47,31 @@ public class PromocionFamiliar extends Promocion{
 		return 0;
 	}
 	
+	@Override
 	public double aplicarCostoDePromocion(Date fecha,
-			List<Atraccion> atracciones, double costoTotalAcumulado, int cantidadDeEntradas) {
+			List<Atraccion> atracciones, double costoTotalAcumulado, Integer cantidadDeEntradas) {
 		
 		if(estaVigente(fecha)){
 			if (cantidadDeEntradas == 4){		
-				costoTotalAcumulado = costoTotalAcumulado*4 - (costoTotalAcumulado*4*10)/100;
+				costoTotalAcumulado = costoTotalAcumulado - (costoTotalAcumulado*0.1);
 				
 			}else if(cantidadDeEntradas >4){
-				double descuentoACuatroEntradas = costoTotalAcumulado*4 - (costoTotalAcumulado*4*0.1);
+				double costoDeCuatroEntradas = calcularCostoDeCuatroEntradas(costoTotalAcumulado, cantidadDeEntradas);
+				double descuentoACuatroEntradas = costoDeCuatroEntradas - (costoDeCuatroEntradas*0.1);
 				int entradasConOtroDescuento = cantidadDeEntradas - 4;
-				costoTotalAcumulado = descuentoACuatroEntradas + (costoTotalAcumulado - (costoTotalAcumulado*0.3))*entradasConOtroDescuento;
+				costoTotalAcumulado = descuentoACuatroEntradas + ((costoTotalAcumulado/cantidadDeEntradas)
+								- ((costoTotalAcumulado/cantidadDeEntradas)*0.3))*entradasConOtroDescuento;
 				
 			}
-		}else{
-			costoTotalAcumulado = costoTotalAcumulado * cantidadDeEntradas;
 		}
 		
 		return costoTotalAcumulado;
+	}
+
+	private double calcularCostoDeCuatroEntradas(double costoTotalAcumulado,
+			Integer cantidadDeEntradas) {
+		
+		return ((4*costoTotalAcumulado)/cantidadDeEntradas);
 	}
 
 }

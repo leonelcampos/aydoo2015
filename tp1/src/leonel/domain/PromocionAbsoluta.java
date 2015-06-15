@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PromocionAbsoluta extends Promocion{
+public class PromocionAbsoluta extends PromocionAcumulable{
 	
 	private Date fechaDeInicio;
 	private Date fechaDeFinalizacion;
@@ -44,6 +44,4 @@ public class PromocionAbsoluta extends Promocion{
 	public List<Atraccion> getAtracciones() {
 		return atracciones;
 	}
-
-	
 }

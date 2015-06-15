@@ -3,7 +3,7 @@ package domain;
 import java.util.Date;
 import java.util.List;
 
-public abstract class Promocion {
+public abstract class PromocionAcumulable {
 	
 	public abstract Date getFechaDeInicio();
 
@@ -22,14 +22,15 @@ public abstract class Promocion {
 	}
 	
 	public double aplicarCostoDePromocion(Date fecha,
-			List<Atraccion> atracciones, double costoTotalAcumulado) {
+			List<Atraccion> atracciones, double costoTotalAcumulado, Integer cantidadDeEntradas) {
 		
 		if(estaVigente(fecha)){
 			if (atracciones.containsAll(this.getAtracciones())){		
-				costoTotalAcumulado = costoTotalAcumulado - calcularCosto(this.getAtracciones()) + this.getCostoPromocion();
+				costoTotalAcumulado = costoTotalAcumulado 
+					- calcularCosto(this.getAtracciones())*cantidadDeEntradas 
+					+ this.getCostoPromocion()* cantidadDeEntradas;
 			}
 		}
-		
 		return costoTotalAcumulado;
 	}
 	

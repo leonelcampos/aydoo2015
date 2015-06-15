@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PromocionPorcentual extends Promocion{
+public class PromocionPorcentual extends PromocionAcumulable{
 
 	
 	private Date fechaDeInicio;

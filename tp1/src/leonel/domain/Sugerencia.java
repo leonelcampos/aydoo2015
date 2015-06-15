@@ -6,44 +6,26 @@ import java.util.List;
 public class Sugerencia {
 	
 	private List<Atraccion> atracciones = new ArrayList<Atraccion>();
-	private double costoXPersona; 
+	private double costoTotal; 
 	private double tiempoTotal;
-	private double costoXCantidadDeEntradas;
 	
-	public Sugerencia(List<Atraccion> atracciones, double tiempoTotal, double costoXPersona, double costoXCantidadDeEntradas){
+	public Sugerencia(List<Atraccion> atracciones, double tiempoTotal, double costoTotal){
 		this.atracciones = atracciones;
-		this.costoXPersona = costoXPersona;
+		this.costoTotal = costoTotal;
 		this.tiempoTotal = tiempoTotal;
-		this.costoXCantidadDeEntradas = costoXCantidadDeEntradas;
 	}
 	
-	public double getCostoXCantidadDeEntradas() {
-		return costoXCantidadDeEntradas;
-	}
-
-	public void setCostoXCantidadDeEntradas(double costoXCantidadDeEntradas) {
-		this.costoXCantidadDeEntradas = costoXCantidadDeEntradas;
-	}
-
-
-
-
 	public List<Atraccion> getAtracciones() {
 		return atracciones;
 	}
 	
-	public void addAtraccion(Atraccion atraccion){
-		atracciones.add(atraccion);
-	}
-	
-
-	public double getCostoXPersona() {
-		return costoXPersona;
+	public double getCostoTotal() {
+		return costoTotal;
 	}
 
 
-	public void setCostoXPersona(double costoXPersona) {
-		this.costoXPersona = costoXPersona;
+	public void setCostoTotal(double costoTotal) {
+		this.costoTotal = costoTotal;
 	}
 
 
@@ -55,7 +37,9 @@ public class Sugerencia {
 	public double getTiempoTotal(){
 		return this.tiempoTotal;
 	}
-	
-	
 
+	public void setAtracciones(List<Atraccion> atracciones) {
+		this.atracciones = atracciones;
+	}
+	
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PromocionAXB extends Promocion{
+public class PromocionAXB extends PromocionAcumulable{
 
 	private Date fechaDeInicio;
 	private Date fechaDeFinalizacion;
@@ -69,7 +69,6 @@ public class PromocionAXB extends Promocion{
 		for (Atraccion attraction : atraccionesObligatorias) {
 			costo += attraction.getCosto();
 		}
-		
 		return costo;
 	}
 
@@ -77,12 +76,13 @@ public class PromocionAXB extends Promocion{
 
 	@Override
 	public double aplicarCostoDePromocion(Date fecha,
-			List<Atraccion> atracciones, double costoTotalAcumulado) {
+			List<Atraccion> atracciones, double costoTotalAcumulado, Integer cantidadDeEntradas) {
 		if(estaVigente(fecha)){
 			if(atracciones.containsAll(atraccionesObligatorias)){
 				if(atracciones.contains(atraccionBonificada)){
 					
-					costoTotalAcumulado = costoTotalAcumulado - atraccionBonificada.getCosto();
+					costoTotalAcumulado = costoTotalAcumulado - atraccionBonificada.getCosto()
+							*cantidadDeEntradas;
 				}else{
 					atracciones.add(atraccionBonificada);
 				}
