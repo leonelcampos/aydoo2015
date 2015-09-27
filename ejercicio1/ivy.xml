@@ -3,10 +3,4 @@
     <dependencies>
         <dependency org="junit" name="junit" rev="4.12"/>
     </dependencies>
-    <dependencies>
-        <dependency org="info.cukes" name="cucumber-java" rev="1.2.2" />
-    </dependencies>
-     <dependencies>
-        <dependency org="info.cukes" name="cucumber-junit" rev="1.2.2" />
-    </dependencies>
 </ivy-module>
